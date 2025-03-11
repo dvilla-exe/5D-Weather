@@ -36,21 +36,31 @@ API Calls
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
 
 const fetchWeather = async (city: string) => {
-  const response = await fetch(`${API_BASE_URL}/api/weather/`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ city }),
-  });
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/weather/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ city }),
+    });
 
-  const weatherData = await response.json();
+    if (!response.ok) {
+      throw new Error(`API Error: ${response.statusText}`);
+    }
 
-  console.log('weatherData: ', weatherData);
+    const weatherData = await response.json();
+    console.log('weatherData:', weatherData); // ✅ Debugging log
 
-  renderCurrentWeather(weatherData[0]);
-  renderForecast(weatherData.slice(1));
+    if (!weatherData.current) {
+      throw new Error('Weather data is missing "current" field.');
+    }
+
+    renderCurrentWeather(weatherData.current);
+    renderForecast(weatherData.forecast);
+  } catch (error) {
+    console.error('Error fetching weather:', error);
+  }
 };
+
 
 const fetchSearchHistory = async () => {
   const history = await fetch(`${API_BASE_URL}/api/weather/history`, {

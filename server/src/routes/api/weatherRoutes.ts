@@ -14,12 +14,17 @@ router.post('/', async (req: Request, res: Response) => {
     
     // TODO: GET weather data from city name
     const weatherData = await WeatherService.getWeatherForCity(city);
+
+    if (!weatherData || !weatherData.current) {
+      return res.status(500).json({ error: 'Invalid weather data received.' });
+    }
     
     // TODO: save city to search history
     await HistoryService.addCity(city);
     
     return res.json(weatherData);
   } catch (error) {
+    console.error('Error fetching weather:', error);
     return res.status(500).json({ error: 'Failed to retrieve weather data' });
   }
 });
