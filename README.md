@@ -9,7 +9,7 @@ An app that uses api data to dynamically render weather forecasts based on the s
 This site will be deployed as a live service on render.
 
 ## Usage
-To use this project simply use the link provided here:.
+To use this project simply use the link provided here:https://fived-weather.onrender.com/.
 
 ## Contributing
 Others can contribute by adding functionality to further display more weather data from various places at  the same time
